@@ -1,0 +1,22 @@
+/* decoder.component.css */
+.container {
+  margin: 20px;
+}
+
+.hex-input {
+  width: 100%;
+}
+
+.decoded-message {
+  margin-top: 20px;
+}
+
+.decoded-message table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.decoded-message td {
+  padding: 5px;
+  border: 1px solid #ddd;
+}

@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  width: 70vw; /* Augmenter la largeur du tableau */
+}
+
+.filter-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+  width: 70vw; /* Augmenter la largeur du tableau */
+}
+
+.filter-field {
+  margin-right: 10px;
+  width: 200px;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.center-table {
+  display: flex;
+  justify-content: center;
+  width: 70vw; /* Augmenter la largeur du tableau */
+}
+
+.mat-elevation-z8 {
+  margin-top: 16px;
+}
+
+.mat-paginator-navigation-first,
+.mat-paginator-navigation-last {
+  display: none;
+}

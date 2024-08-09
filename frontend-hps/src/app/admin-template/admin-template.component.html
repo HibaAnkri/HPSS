@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body (keydown.shift.delete)="logout()">
+<mat-toolbar style="background-color: #E9E9E9">
+  <button mat-stroked-button style="background-color: #3F51B5; color: white" class="btn4" (click)="drawer.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <button mat-stroked-button *ngIf="authService.roles.includes('ADMIN')" class="btn2" color="primary" routerLink="/admin/panel">Access Panel</button>
+  <button mat-stroked-button class="btn2" color="primary" routerLink="/admin/decoder">Decoder ISO 8583</button>
+  <button mat-stroked-button class="btn2" color="primary" routerLink="/admin/servicees">Sort By Services</button>
+  <button mat-stroked-button *ngIf="authService.roles.includes('ADMIN')" class="btn2" color="primary" routerLink="/admin/password">Change Password</button>
+
+  <span class="spacer"></span>
+  <div *ngIf="authService.authenticated && authService.roles.includes('USER')" class="timer">
+    <i class="fas fa-clock"></i>
+    <app-timer></app-timer>
+  </div>
+  <button (click)="logout()" mat-stroked-button style="background-color: #3F51B5; color: white">Logout</button>
+</mat-toolbar>
+<mat-drawer-container>
+  <mat-drawer #drawer mode="side" position="start" opened="true" class="red-container" style="background-color: #E9E9E9">
+    <mat-nav-list>
+      <mat-list-item>
+        <button mat-stroked-button class="btn3" color="primary" routerLink="/admin/dashboard">
+          <mat-icon>home</mat-icon>
+          HOME
+        </button>
+      </mat-list-item>
+      <mat-list-item>
+        <button mat-stroked-button class="btn3 expand-button" color="primary" (click)="toggleSubMenu('hsid')">
+          <mat-icon>payment</mat-icon>
+          <span class="button-content">
+            <span>HSID</span>
+            <mat-icon style="margin-left: 18px">{{ subMenus['hsid'] ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </span>
+        </button>
+      </mat-list-item>
+
+      <ng-container *ngIf="subMenus['hsid']">
+        <mat-list-item style="padding-left: 24px;">
+          <button mat-stroked-button class="btn5" color="primary" routerLink="/admin/HSID">
+            <mat-icon>info</mat-icon>
+            Details
+          </button>
+        </mat-list-item>
+        <mat-list-item style="padding-left: 24px;">
+          <button mat-stroked-button class="btn5" color="primary" routerLink="/admin/HSID/service">
+            <mat-icon>filter_list</mat-icon>
+            Filter
+          </button>
+        </mat-list-item>
+      </ng-container>
+
+      <mat-list-item>
+        <button mat-stroked-button class="btn3 expand-button" color="primary" (click)="toggleSubMenu('msid')">
+          <mat-icon>account_balance_wallet</mat-icon>
+          <span class="button-content">
+            <span>MSID</span>
+            <span class="spacer"></span>
+            <mat-icon  style="margin-left: 18px">{{ subMenus['msid'] ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </span>
+        </button>
+      </mat-list-item>
+
+      <ng-container *ngIf="subMenus['msid']" style="margin-right: 1px">
+        <mat-list-item style="padding-left: 24px;">
+          <button mat-stroked-button class="btn5" color="primary" routerLink="/admin/MSID">
+            <mat-icon>info</mat-icon>
+            Details
+          </button>
+        </mat-list-item>
+        <mat-list-item style="padding-left: 24px;">
+          <button mat-stroked-button class="btn5" color="primary" routerLink="/admin/MSID/service">
+            <mat-icon>filter_list</mat-icon>
+            Filter
+          </button>
+        </mat-list-item>
+      </ng-container>
+
+    </mat-nav-list>
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <div style="min-height: 800px">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>
+</body>
+</html>

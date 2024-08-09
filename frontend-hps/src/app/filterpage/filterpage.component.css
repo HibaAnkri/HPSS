@@ -1,0 +1,43 @@
+.container {
+  padding: 20px;
+}
+
+.filter-container {
+  margin-bottom: 20px;
+}
+
+.filter-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: stretch; /* This ensures all items have the same height */
+}
+
+.filter-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-button {
+  align-self: stretch; /* This makes the button take the same height as other items */
+}
+
+.element-values-card {
+  margin-top: 20px;
+}
+
+.refresh-button {
+  margin-left: auto;
+}
+
+.center-table {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.table-container {
+  max-height: 400px;
+  overflow-y: auto;
+  width: 100%;
+}

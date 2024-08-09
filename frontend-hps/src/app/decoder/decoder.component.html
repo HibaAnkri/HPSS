@@ -1,0 +1,27 @@
+<!-- decoder.component.html -->
+<div class="container">
+  <h1>Parse Decode Convert ISO8583 messages</h1>
+  <mat-form-field appearance="outline" class="hex-input">
+    <mat-label>Hex</mat-label>
+    <textarea matInput [(ngModel)]="hexMessage" placeholder="Enter hex message"></textarea>
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="decodeMessage()">Convert</button>
+
+  <div *ngIf="decodedMessage" class="decoded-message">
+    <h2>Decoded Message</h2>
+    <table>
+      <tr>
+        <th>Field</th>
+        <th>Value</th>
+        <th>Element Number</th>
+        <th>Length</th>
+      </tr>
+      <tr *ngFor="let item of orderedDecodedMessage">
+        <td><strong>{{ item.key }}</strong></td>
+        <td>{{ item.value }}</td>
+        <td>{{ item.element }}</td>
+        <td>{{ item.length }}</td>
+      </tr>
+    </table>
+  </div>
+</div>

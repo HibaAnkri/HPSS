@@ -1,0 +1,67 @@
+mat-dialog-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 0;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.close-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px;
+}
+
+mat-dialog-actions {
+  display: flex;
+  justify-content: center; /* Centre les boutons */
+  align-items: center;
+  margin-top: 20px; /* Ajout d'un espace supérieur */
+}
+
+.action-button {
+  margin: 0 10px; /* Espace entre les boutons */
+}
+
+.action-button:first-child {
+  background-color: #f0f0f0; /* Couleur de fond pour "Close" */
+  color: #000; /* Couleur du texte pour "Close" */
+}
+
+.action-button:last-child {
+  background-color: #ff6347; /* Couleur de fond pour "Yes, Delete It!" */
+  color: #fff; /* Couleur du texte pour "Yes, Delete It!" */
+}
+
+mat-dialog-content {
+  text-align: center;
+}
+
+.dialog-image {
+  margin-bottom: 2em;
+}
+
+.dialog-text {
+  margin-top: 2em;
+}
+
+.large-dialog {
+  width: 400px;
+  max-width: 90vw;
+  height: 300px;
+  max-height: 90vw;
+}
+
+mat-dialog-container {
+  min-width: 400px;
+  max-width: 90vw;
+  min-height: 300px;
+  max-height: 90vw;
+}

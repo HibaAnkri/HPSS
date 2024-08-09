@@ -1,0 +1,58 @@
+<div class="container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Element Values for Element Number {{elementnumber}}</mat-card-title>
+      <button mat-raised-button color="primary" class="add-button" (click)="openAddElementValueDialog()">+ Ajouter</button>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+          <!-- Position Column -->
+          <ng-container *ngIf="!hidePositionFields" matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef> Position </th>
+            <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+          </ng-container>
+
+          <!-- Description P Column -->
+          <ng-container *ngIf="!hidePositionFields" matColumnDef="description_p">
+            <th mat-header-cell *matHeaderCellDef> Description P </th>
+            <td mat-cell *matCellDef="let element"> {{element.description_p}} </td>
+          </ng-container>
+
+          <!-- Code Column -->
+          <ng-container matColumnDef="code">
+            <th mat-header-cell *matHeaderCellDef> Code </th>
+            <td mat-cell *matCellDef="let element"> {{element.code}} </td>
+          </ng-container>
+
+          <!-- Description C Column -->
+          <ng-container matColumnDef="description_c">
+            <th mat-header-cell *matHeaderCellDef> Description C </th>
+            <td mat-cell *matCellDef="let element"> {{element.description_c}} </td>
+          </ng-container>
+
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Action </th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button color="warn" (click)="deleteElementValue(element.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" (click)="openEditElementValueDialog(element)">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[10,15,20]" showFirstLastButtons></mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,13 @@
+<div mat-dialog-title class="dialog-header">
+  <button mat-icon-button (click)="onNoClick()" class="close-button">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<mat-dialog-content>
+  <img src="assets/image.gif" class="dialog-image" style="width: 50px; height: 50px;">
+  <p class="dialog-text">Are you sure you want to remove this record?</p>
+</mat-dialog-content>
+<mat-dialog-actions class="dialog-actions">
+  <button mat-button (click)="onNoClick()" class="action-button">Close</button>
+  <button mat-button color="warn" (click)="onYesClick()" class="action-button">Yes, Delete It!</button>
+</mat-dialog-actions>

@@ -1,0 +1,33 @@
+<div class="dialog-header">
+  <h2 mat-dialog-title>Add Message</h2>
+  <button mat-icon-button (click)="onNoClick()" class="close-button">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<mat-dialog-content>
+  <form>
+    <!-- Nom Protocole avec mat-select -->
+    <mat-form-field class="example-full-width">
+      <mat-label>Nom Protocole</mat-label>
+      <mat-select [(ngModel)]="data.nomprotocole" name="nomprotocole">
+        <mat-option *ngFor="let protocole of protocoles" [value]="protocole">
+          {{protocole}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label>Code</mat-label>
+      <input matInput [(ngModel)]="data.code" name="code">
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label>Specification</mat-label>
+      <input matInput [(ngModel)]="data.specification" name="specification">
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button class="close-button-style" (click)="onNoClick()">Close</button>
+  <button mat-button class="add-button-style" color="primary" [mat-dialog-close]="data">Add Message</button>
+</mat-dialog-actions>

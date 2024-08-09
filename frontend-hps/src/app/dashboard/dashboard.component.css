@@ -1,0 +1,19 @@
+.dashboard-container {
+  padding: 16px;
+}
+
+.example-form-field {
+  margin-bottom: 16px;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-elevation-z8 {
+  margin-top: 16px;
+}
+
+mat-slide-toggle {
+  margin: 0;
+}

@@ -1,0 +1,60 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mat-card-header {
+  display: flex;
+  justify-content: space-between; /* Espace entre le titre et le bouton */
+  align-items: center; /* Aligner les éléments verticalement */
+  margin-bottom: 16px; /* Ajoute un espace entre l'en-tête et le contenu */
+  padding-bottom: 16px; /* Ajoute de l'espace en bas pour séparer davantage */
+}
+
+.custom-card-header {
+  margin-bottom: 32px; /* Crée un saut de 2 lignes */
+}
+
+.mat-card-title {
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+.add-button {
+  margin-left: auto; /* Pousse le bouton vers le bord droit */
+}
+
+.table-container {
+  overflow-x: auto; /* Activer le défilement horizontal si nécessaire */
+  width: 100%;
+}
+
+.mat-elevation-z8 {
+  min-width: 100%;
+  width: auto;
+}
+
+.mat-table {
+  width: 100%;
+}
+
+.mat-header-cell,
+.mat-cell {
+  text-align: center; /* Centrer le texte des cellules */
+}
+
+.mat-header-cell.action-header,
+.mat-cell.action-cell {
+  text-align: center; /* Centrer spécifiquement la colonne d'action */
+}
+
+.mat-dialog-actions {
+  justify-content: space-between; /* Écarte les boutons de manière uniforme */
+}
+
+.mat-dialog-title {
+  font-weight: bold; /* Met en gras le titre */
+  text-align: center; /* Centre le texte du titre */
+  margin-bottom: 16px; /* Ajoute de l'espace sous le titre */
+}

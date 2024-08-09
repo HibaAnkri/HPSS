@@ -1,0 +1,67 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+  overflow: hidden; /* Empêche le défilement */
+}
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #3498db, #8e44ad);
+  z-index: -1;
+}
+
+.card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  padding: 40px; /* Augmente la taille du padding pour plus d'espace */
+  max-width: 454px; /* Augmente la largeur maximale de la carte */
+  width: 90%;
+  z-index: 1;
+}
+
+.logo {
+  width: 60px; /* Augmente la taille du logo */
+  height: 24px; /* Augmente la taille du logo */
+  margin-right: 10px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.button-container button {
+  width: 48%; /* Augmente légèrement la largeur des boutons */
+  border-radius: 6px;
+}
+
+.mat-card {
+  box-shadow: none;
+}
+
+mat-divider {
+  margin: 20px 0;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.mat-form-field {
+  width: 100%;
+  margin-bottom: 25px; /* Augmente l'espacement entre les champs */
+}
