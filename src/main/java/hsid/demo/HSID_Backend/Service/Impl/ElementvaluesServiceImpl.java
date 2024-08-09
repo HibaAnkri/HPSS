@@ -122,11 +122,11 @@ public class ElementvaluesServiceImpl implements ElementvaluesService {
 
     @Override
     public ElementvaluesDto createElementValue(ElementvaluesDto elementvaluesDto) {
-        // Map DTO to Entity
+
         Elementvalues elementValue = ElementvaluesMapper.mapToElementValue(elementvaluesDto);
-        // Save entity
+
         Elementvalues savedElementValue = elementvaluesRepository.save(elementValue);
-        // Map Entity to DTO
+
         return ElementvaluesMapper.mapToElementValueDto(savedElementValue);
     }
     public void deleteElementValue(Long id) {

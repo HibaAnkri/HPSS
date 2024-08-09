@@ -98,7 +98,7 @@ public class ElementvaluesController {
             @RequestParam(required = false) String servicecode) {
         return elementvaluesService.findByProtocolServiceAndServicecode(nomprotocole, service, servicecode);
     }
-    // Requête POST avec position et description_p en paramètre
+
     @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/element-values")
     public ResponseEntity<?> createElementValue(
@@ -108,35 +108,34 @@ public class ElementvaluesController {
             @RequestBody ElementvaluesDto elementvaluesDto) {
 
         try {
-            // Vérifier si le code existe déjà pour la même position
+
             boolean exists = elementvaluesService.existsByElementnumberAndPositionAndCode(elementnumber, position, elementvaluesDto.getCode());
             if (exists) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Code already exists for the given position");
             }
 
-            // Remplir les paramètres de position et description_p
+
             elementvaluesDto.setElementnumber(elementnumber);
             elementvaluesDto.setPosition(position);
             elementvaluesDto.setDescription_p(description_p);
 
-            // Définir service et servicecode sur null
+
             elementvaluesDto.setService(null);
             elementvaluesDto.setServicecode(null);
             elementvaluesDto.setIn_message(null);
 
-            // Créer l'élément
+
             ElementvaluesDto createdValue = elementvaluesService.createElementValue(elementvaluesDto);
 
-            // Retourner l'objet créé
+
             return ResponseEntity.status(HttpStatus.CREATED).body(createdValue);
 
         } catch (Exception e) {
-            // Log the exception if needed
+
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
-    // Ajouter le endpoint pour supprimer un élément
     @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping("/element-values/{id}")
     public ResponseEntity<Void> deleteElementValue(@PathVariable Long id) {

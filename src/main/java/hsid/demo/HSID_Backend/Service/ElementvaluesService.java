@@ -19,7 +19,7 @@ public interface ElementvaluesService {
     ElementvaluesDto createElementValue(ElementvaluesDto elementvaluesDto);
     void deleteElementValue(Long id);
 
-    // Ajoutez cette méthode
+
     boolean existsByElementnumberAndPositionAndCode(Integer elementnumber, String position, String code);
 
     ElementvaluesDto updateElementValue(Long id, ElementvaluesDto elementvaluesDto);

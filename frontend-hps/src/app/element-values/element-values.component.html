@@ -9,7 +9,7 @@
       <div class="mat-elevation-z8">
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-          <!-- Position Column -->
+
           <ng-container *ngIf="!hidePositionFields" matColumnDef="position">
             <th mat-header-cell *matHeaderCellDef> Position </th>
             <td mat-cell *matCellDef="let element"> {{element.position}} </td>
@@ -21,19 +21,19 @@
             <td mat-cell *matCellDef="let element"> {{element.description_p}} </td>
           </ng-container>
 
-          <!-- Code Column -->
+
           <ng-container matColumnDef="code">
             <th mat-header-cell *matHeaderCellDef> Code </th>
             <td mat-cell *matCellDef="let element"> {{element.code}} </td>
           </ng-container>
 
-          <!-- Description C Column -->
+
           <ng-container matColumnDef="description_c">
             <th mat-header-cell *matHeaderCellDef> Description C </th>
             <td mat-cell *matCellDef="let element"> {{element.description_c}} </td>
           </ng-container>
 
-          <!-- Action Column -->
+
           <ng-container matColumnDef="action">
             <th mat-header-cell *matHeaderCellDef> Action </th>
             <td mat-cell *matCellDef="let element">

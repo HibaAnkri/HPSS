@@ -50,7 +50,7 @@ export class EditElementValueDialogComponent implements OnInit {
 
   onSaveClick(): void {
     if (this.editForm.valid) {
-      // Inclure les champs masqués dans les valeurs envoyées pour sauvegarde
+
       const result = {
         ...this.editForm.getRawValue(),
         position: this.data.position,
