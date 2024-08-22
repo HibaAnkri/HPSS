@@ -1,142 +1,73 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Empêche le défilement global */
+}
+
 .container {
+  height: 85vh; /* La hauteur prend toute la hauteur de la fenêtre */
+  overflow-y: auto; /* Permet le défilement vertical */
+  margin-top: 2em; /* Ajoute un saut de deux lignes en haut */
+  margin-left: 0; /* Aligne la table à gauche */
+  width: auto; /* La table occupe toute la largeur disponible */
+}
+
+
+
+.btn-container {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Aligner le contenu à gauche */
-  margin-top: 20px; /* Ajuster la marge supérieure */
-  margin-left: 20px; /* Ajouter de l'espace à gauche pour centrer le tableau par rapport à la page */
+  gap: 20px; /* Espace entre les boutons, ajustez selon vos besoins */
+  align-items: center;
 }
 
-.table-card {
-  width: 70vw; /* Augmenter la largeur du tableau */
+.btn1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px; /* Ajustez la largeur minimum si nécessaire */
+  min-height: 40px; /* Ajustez la hauteur minimum si nécessaire */
+  padding: 20px;
 }
 
-.card-header-centered {
+.btn1 mat-icon {
+  margin: 0; /* Supprime les marges par défaut */
+}
+
+.dialog-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dialog {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+}
+
+.aligned-title {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  width: 100%;
 }
 
-.card-title {
-  text-align: center;
-  flex-grow: 1;
-}
-
-.title-divider {
-  margin-bottom: 16px;
-}
-
-.line-break {
-  margin-bottom: 48px; /* Ajuster la marge pour simuler un saut de trois lignes */
-}
-
-.line-break-five {
-  margin-bottom: 80px; /* Ajuster cette valeur selon vos besoins */
-}
-
-.button-search-container {
-  display: flex;
-  justify-content: flex-start; /* Alignement à gauche */
-  width: 100%;
-  margin-bottom: 4px;
-}
-
-.search-container {
-  flex-grow: 1;
-}
-
-.search-field {
-  width: 100%;
-  max-width: 300px;
-}
-
-.mat-form-field {
-  width: 100%;
-}
-
-.mat-form-field-appearance-outline .mat-form-field-outline {
-  color: #dcdcdc;
-}
-
-.mat-form-field-appearance-outline .mat-form-field-outline-start,
-.mat-form-field-appearance-outline .mat-form-field-outline-end {
-  border-width: 1px;
-}
-
-.mat-form-field-appearance-outline .mat-form-field-outline-gap {
-  border-width: 1px;
-}
-
-.mat-icon {
-  color: rgba(0, 0, 0, 0.54);
-}
-
-.mat-paginator-navigation-previous,
-.mat-paginator-navigation-next {
-  display: inline-flex;
-}
-
-.mat-paginator-range-actions .mat-button-base {
-  display: none;
-}
-
-.table-container {
-  margin-top: 4px;
-  width: 100%;
-  max-width: 90vw; /* Augmenter la largeur maximale du conteneur de tableau */
-  max-height: 70vh; /* Ajuster la hauteur maximale du conteneur de tableau */
-}
-
-input[type="search"]::-webkit-search-cancel-button {
-  -webkit-appearance: none;
-  appearance: none;
-  display: none;
-}
-
-input[type="search"]::-ms-clear {
-  display: none;
-  width: 0;
-  height: 0;
-}
-
-input[type="search"]::-ms-reveal {
-  display: none;
-  width: 0;
-  height: 0;
-}
-
-.icon-green .mat-icon {
-  color: green;
-}
-
-.icon-red .mat-icon {
-  color: red;
-}
-
-.icon-blue .mat-icon {
-  color: blue;
-}
-
-.header-cell {
-  background-color: #f5f5f5;
-  color: #000;
-  font-weight: bold;
-}
-
-.action-buttons {
+.btn2 {
   display: flex;
   align-items: center;
-  justify-content: center; /* Centrer les boutons d'action */
+  justify-content: center;
+  min-width: 60px; /* Ajustez la largeur minimum si nécessaire */
+  min-height: 40px; /* Ajustez la hauteur minimum si nécessaire */
+  padding: 20px;
+  margin-bottom: 10px;
 }
 
-.icon-red {
-  color: red !important;
-}
-
-.action-header {
-  text-align: center; /* Centrer l'en-tête de la colonne d'action */
-}
-
-.line-break-five {
-  margin-bottom: 30px; /* Ajuster cette valeur selon vos besoins */
+.btn2 mat-icon {
+  margin: 0; /* Supprime les marges par défaut */
 }

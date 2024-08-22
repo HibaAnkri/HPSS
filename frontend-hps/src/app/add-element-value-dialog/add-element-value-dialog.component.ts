@@ -12,6 +12,7 @@ export class AddElementValueDialogComponent implements OnInit {
   addElementValueForm: FormGroup;
   errorMessage: string | null = null;
   hidePositionFields: boolean;
+  isSpecialElementNumber: boolean;
 
   constructor(
     public dialogRef: MatDialogRef<AddElementValueDialogComponent>,
@@ -19,15 +20,26 @@ export class AddElementValueDialogComponent implements OnInit {
     private fb: FormBuilder,
     private http: HttpClient
   ) {
-    this.hidePositionFields = this.data.elementnumber === 24 || this.data.elementnumber === 25;
-
-    this.addElementValueForm = this.fb.group({
-      position: [{ value: '', disabled: this.hidePositionFields }, Validators.required],
-      description_p: [{ value: '', disabled: this.hidePositionFields }, Validators.required],
-      code: ['', Validators.required],
-      description_c: ['', Validators.required],
-      nomprotocole: [{ value: data.nomprotocole, disabled: true }]
-    });
+    const specialElementNumbers = [48, 55, 61, 62, 127];
+    this.isSpecialElementNumber = specialElementNumbers.includes(this.data.elementnumber);
+    this.hidePositionFields = this.data.elementnumber === 24 || this.data.elementnumber === 25 || this.data.elementnumber === 39;
+    if (this.isSpecialElementNumber) {
+      this.addElementValueForm = this.fb.group({
+        tag: ['', Validators.required],
+        nom: [''],
+        format: [''],
+        longueur: [''],
+        description: ['', Validators.required]
+      });
+    } else {
+      this.addElementValueForm = this.fb.group({
+        position: [{ value: '', disabled: this.hidePositionFields }, Validators.required],
+        description_p: [{ value: '', disabled: this.hidePositionFields }, Validators.required],
+        code: ['', Validators.required],
+        description_c: ['', Validators.required],
+        nomprotocole: [{ value: data.nomprotocole, disabled: true }]
+      });
+    }
   }
 
   ngOnInit(): void {

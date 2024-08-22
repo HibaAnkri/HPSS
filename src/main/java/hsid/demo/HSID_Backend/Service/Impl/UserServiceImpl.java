@@ -35,45 +35,46 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public User createUser(User user) {
-        user.setRole(Role.USER);  // Par défaut, on assigne le rôle USER
+    public User createUser(User user){
+        user.setRole(Role.USER);
         user.setActive(false);
         return userRepository.save(user);
     }
 
-    public User loginUser(User user) {
+
+
+    public User loginUser(User user){
         Optional<User> optionalUser = userRepository.findFirstByEmail(user.getEmail());
-        if (optionalUser.isPresent()) {
+        if(optionalUser.isPresent()){
             User dbUser = optionalUser.get();
-            if (!dbUser.getActive()) {
+            if(!dbUser.getActive()){
                 throw new EntityNotFoundException("User is not active.");
             }
 
-            if (dbUser.getPassword().equals(user.getPassword())) {
-                // Vérifier si l'utilisateur a le rôle approprié
-                if (dbUser.getRole() == Role.USER) {
-                    throw new EntityNotFoundException("User is not confirmed.");
-                }
+            if(dbUser.getPassword().equals(user.getPassword())){
                 return dbUser;
-            } else {
+            }else{
                 throw new EntityNotFoundException("Password is wrong.");
             }
-        } else {
+        }else{
             throw new EntityNotFoundException("User not found.");
         }
     }
 
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers(){
         return userRepository.findAll();
     }
 
-    public User updateUserStatus(Long userId) {
+
+    public User updateUserStatus(Long userId){
         Optional<User> optionalUser = userRepository.findById(userId);
-        if (optionalUser.isPresent()) {
+        if(optionalUser.isPresent()){
             User dbUser = optionalUser.get();
+
             dbUser.setActive(!dbUser.getActive());
+
             return userRepository.save(dbUser);
-        } else {
+        }else{
             throw new EntityNotFoundException("User not found.");
         }
     }
@@ -87,11 +88,13 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
-    public User changePassword(Long userId, String newPassword) {
+    public User changePassword(Long userId, String oldPassword, String newPassword) {
         Optional<User> userOptional = userRepository.findById(userId);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
+            if (!user.getPassword().equals(oldPassword)) {
+                throw new RuntimeException("Old password is incorrect");
+            }
             user.setPassword(newPassword);
             return userRepository.save(user);
         } else {
@@ -111,14 +114,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User changeUserRole(Long userId, Role newRole) {
-        Optional<User> userOptional = userRepository.findById(userId);
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            user.setRole(newRole);
-            return userRepository.save(user);
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
+    public User changeUserRoleToConfirmed(Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            if (user.getRole() == Role.USER) {
+                user.setRole(Role.CONFIRMED_USER);
+                return userRepository.save(user);
+            } else {
+                throw new IllegalArgumentException("User is not in the USER role.");
+            }
         } else {
-            throw new RuntimeException("User not found");
+            throw new EntityNotFoundException("User not found with id " + id);
         }
     }
 

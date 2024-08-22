@@ -9,10 +9,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class AccesspanelComponent {
 
+
   allUsers = [];
   public displayedColumns = ["Name", "Email", "role","changeRole", "active", "actions", "delete"];
 
-  constructor(private userService: AuthService,
+  constructor(private userService:  AuthService,
               private snackBar: MatSnackBar
   ) { }
 

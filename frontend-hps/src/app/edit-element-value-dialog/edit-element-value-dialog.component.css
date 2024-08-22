@@ -1,0 +1,68 @@
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.close-button {
+  margin: 0;
+}
+
+mat-dialog-content {
+  text-align: center;
+}
+
+mat-dialog-actions {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.close-button-style {
+  background-color: rgba(128, 128, 128, 0.1); /* Gris transparent */
+  color: red;
+  border: 1px solid #ccc;
+  padding: 8px 16px;
+  margin-right: 8px; /* Ajoutez une marge entre les boutons */
+}
+
+.add-button-style {
+  background-color: #3f51b5; /* Couleur primaire */
+  color: white;
+  border: 1px solid #3f51b5;
+  padding: 8px 16px;
+}
+
+button[mat-dialog-close] {
+  margin-left: 8px;
+}
+
+button {
+  min-width: 64px;
+  padding: 8px 16px;
+}
+
+button:first-child {
+  margin-right: 16px;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+textarea[matInput] {
+  width: 100%;
+  resize: vertical; /* Permet de redimensionner verticalement seulement */
+}
+
+.cancel-icon {
+  color: red;
+  vertical-align: middle;
+}
+
+.update-icon {
+  color: white; /* Garder la couleur blanche car le bouton est bleu */
+  vertical-align: middle;
+}

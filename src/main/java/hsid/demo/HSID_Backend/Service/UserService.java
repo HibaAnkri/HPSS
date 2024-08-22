@@ -3,6 +3,7 @@ package hsid.demo.HSID_Backend.Service;
 import hsid.demo.HSID_Backend.Entities.User;
 import hsid.demo.HSID_Backend.Enum.Role;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -16,10 +17,11 @@ public interface UserService {
 
     void deleteUserById(Long id);
 
-    User changePassword(Long userId, String newPassword);
+    User changePassword(Long userId,String oldPassword, String newPassword);
 
     User setInactive(Long id);
 
-    // Nouvelle méthode pour changer le rôle
-    User changeUserRole(Long userId, Role newRole);
+    Optional<User> findById(Long id);
+
+    User changeUserRoleToConfirmed(Long id);
 }

@@ -1,32 +1,70 @@
 <h1 mat-dialog-title>Edit Element Value</h1>
 <div mat-dialog-content>
   <form [formGroup]="editForm">
-    <ng-container *ngIf="!hidePositionFields">
+
+    <ng-container *ngIf="isSpecialElementNumber">
+      <!-- Fields for special element numbers (48, 55, 61, 62, 127) -->
       <mat-form-field>
-        <mat-label>Position</mat-label>
-        <mat-select formControlName="position">
-          <mat-option *ngFor="let pos of positions" [value]="pos.position">
-            {{ pos.position }}
-          </mat-option>
-        </mat-select>
+        <mat-label>Tag</mat-label>
+        <input matInput formControlName="tag" required>
       </mat-form-field>
+
       <mat-form-field>
-        <mat-label>Description P</mat-label>
-        <input matInput formControlName="description_p" [disabled]="true">
+        <mat-label>Nom</mat-label>
+        <input matInput formControlName="nom">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Format</mat-label>
+        <input matInput formControlName="format">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Longueur</mat-label>
+        <input matInput formControlName="longueur">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Description</mat-label>
+        <input matInput formControlName="description" required>
       </mat-form-field>
     </ng-container>
-    <mat-form-field>
-      <mat-label>Code</mat-label>
-      <input matInput formControlName="code">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Description C</mat-label>
-      <input matInput formControlName="description_c">
-    </mat-form-field>
 
+    <ng-container *ngIf="!isSpecialElementNumber">
+      <!-- Default fields for other element numbers -->
+      <ng-container *ngIf="!hidePositionFields">
+        <mat-form-field>
+          <mat-label>Position</mat-label>
+          <mat-select formControlName="position">
+            <mat-option *ngFor="let pos of positions" [value]="pos.position">
+              {{ pos.position }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Description P</mat-label>
+          <input matInput formControlName="description_p" [disabled]="true">
+        </mat-form-field>
+      </ng-container>
+
+      <mat-form-field>
+        <mat-label>Code</mat-label>
+        <input matInput formControlName="code">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Description C</mat-label>
+        <input matInput formControlName="description_c">
+      </mat-form-field>
+    </ng-container>
   </form>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button color="primary" (click)="onSaveClick()">Save</button>
+  <button mat-button class="close-button-style" (click)="onNoClick()">
+    <mat-icon class="cancel-icon">cancel</mat-icon> Cancel
+  </button>
+  <button mat-button class="add-button-style" color="primary" (click)="onSaveClick()">
+    <mat-icon class="update-icon">update</mat-icon> Save
+  </button>
 </div>

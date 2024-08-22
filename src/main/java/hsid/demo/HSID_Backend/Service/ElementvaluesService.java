@@ -1,6 +1,7 @@
 package hsid.demo.HSID_Backend.Service;
 
 import hsid.demo.HSID_Backend.Dtos.ElementvaluesDto;
+import hsid.demo.HSID_Backend.Dtos.TagsDto;
 import hsid.demo.HSID_Backend.Entities.Elementvalues;
 
 import java.util.List;
@@ -23,4 +24,11 @@ public interface ElementvaluesService {
     boolean existsByElementnumberAndPositionAndCode(Integer elementnumber, String position, String code);
 
     ElementvaluesDto updateElementValue(Long id, ElementvaluesDto elementvaluesDto);
+
+    List<TagsDto> getElementValuesAsTags(Integer elementnumber, String code);
+
+
+
+
+    TagsDto createTag(TagsDto tagsDto);
 }

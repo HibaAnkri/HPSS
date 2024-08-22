@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>Update Requirement</h1>
+<div mat-dialog-content>
+  <mat-form-field style="width: 100%;">
+    <mat-label>New Requirement</mat-label>
+    <input matInput [(ngModel)]="newValue">
+  </mat-form-field>
+  <p>O est pour Obligatoire.</p>
+  <p>C est pour Conditionnelle.</p>
+  <p>R est pour Retournée inchangée.</p>
+  <p>F est pour Facultative.</p>
+</div>
+
+<div mat-dialog-actions class="dialog-actions">
+  <button mat-stroked-button color="warn" class="button-full-width" (click)="onCancel()">
+    <mat-icon>cancel</mat-icon> Cancel
+  </button>
+  <button mat-stroked-button color="primary" class="button-full-width" (click)="onUpdate()">
+    <mat-icon>update</mat-icon> Update
+  </button>
+</div>

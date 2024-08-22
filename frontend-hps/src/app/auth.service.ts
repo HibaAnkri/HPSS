@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+
 const BASIC_URL = "http://localhost:8080/";
 
 @Injectable({

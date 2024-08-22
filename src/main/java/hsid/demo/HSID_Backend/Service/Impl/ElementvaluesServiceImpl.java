@@ -1,15 +1,20 @@
 package hsid.demo.HSID_Backend.Service.Impl;
 
 import hsid.demo.HSID_Backend.Dtos.ElementvaluesDto;
+import hsid.demo.HSID_Backend.Dtos.TagsDto;
 import hsid.demo.HSID_Backend.Entities.Elementvalues;
 import hsid.demo.HSID_Backend.Entities.Messages;
+import hsid.demo.HSID_Backend.Entities.Tags;
 import hsid.demo.HSID_Backend.Mappers.ElementvaluesMapper;
+import hsid.demo.HSID_Backend.Mappers.TagsMapper;
 import hsid.demo.HSID_Backend.Repository.ElementvaluesRepository;
 import hsid.demo.HSID_Backend.Repository.MessagesRepository;
+import hsid.demo.HSID_Backend.Repository.TagsRepository;
 import hsid.demo.HSID_Backend.Service.ElementvaluesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +28,8 @@ public class ElementvaluesServiceImpl implements ElementvaluesService {
 
     @Autowired
     private MessagesRepository messagesRepository;
+    @Autowired
+    private TagsRepository tagsRepository;
 
     @Override
     public List<ElementvaluesDto> getElementValuesByElementnumberAndNomprotocole(Integer elementnumber, String nomprotocole) {
@@ -163,5 +170,65 @@ public class ElementvaluesServiceImpl implements ElementvaluesService {
             throw new RuntimeException("Element value not found");
         }
     }
+
+
+    @Override
+    public List<TagsDto> getElementValuesAsTags(Integer elementnumber, String code) {
+        List<Elementvalues> elementValues;
+        List<Tags> tags;
+
+        if (code.startsWith("H_")) {
+            // Rechercher dans element_values et tags pour HSID
+            elementValues = elementvaluesRepository.findByElementnumberAndNomprotocoleAndCode(elementnumber, "HSID", code);
+            tags = tagsRepository.findByElementNumberAndNomprotocole(elementnumber, "HSID");
+        } else if (code.startsWith("M_")) {
+            // Rechercher dans element_values et tags pour MSID
+            elementValues = elementvaluesRepository.findByElementnumberAndNomprotocoleAndCode(elementnumber, "MSID", code);
+            tags = tagsRepository.findByElementNumberAndNomprotocole(elementnumber, "MSID");
+        } else {
+            // Si le code ne correspond ni à HSID ni à MSID, retourner une liste vide ou une erreur
+            return new ArrayList<>();
+        }
+
+        List<TagsDto> results = new ArrayList<>();
+
+        // Ajouter les résultats element_values au résultat final
+        for (Elementvalues ev : elementValues) {
+            TagsDto tag = new TagsDto();
+            tag.setElementNumber(ev.getElementnumber());
+            tag.setNomprotocole(ev.getNomprotocole());
+            tag.setTag(ev.getCode());
+            tag.setDescription(ev.getDescription_p());
+            tag.setLongueur(ev.getPosition());
+            tag.setFormat(ev.getServicecode());
+
+            results.add(tag);
+        }
+
+        // Ajouter les résultats tags au résultat final
+        for (Tags tagEntity : tags) {
+            TagsDto tag = new TagsDto();
+            tag.setElementNumber(tagEntity.getElementNumber());
+            tag.setNomprotocole(tagEntity.getNomprotocole());
+            tag.setTag(tagEntity.getTag());
+            tag.setDescription(tagEntity.getDescription());
+            tag.setLongueur(tagEntity.getLongueur());
+            tag.setFormat(tagEntity.getFormat());
+            tag.setNom(tagEntity.getNom());  // Assurez-vous d'ajouter cette ligne pour définir le nom
+
+            results.add(tag);
+        }
+
+        return results;
+    }
+
+
+    @Override
+    public TagsDto createTag(TagsDto tagsDto) {
+        Tags newTag = TagsMapper.mapToTags(tagsDto);
+        Tags savedTag = tagsRepository.save(newTag);
+        return TagsMapper.mapToTagsDto(savedTag);
+    }
+
 
 }

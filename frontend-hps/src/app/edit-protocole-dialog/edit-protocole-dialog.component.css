@@ -22,7 +22,7 @@ mat-dialog-actions {
 
 .close-button-style {
   background-color: rgba(128, 128, 128, 0.1); /* Gris transparent */
-  color: black;
+  color: red; /* Couleur rouge pour le bouton Cancel */
   border: 1px solid #ccc;
   padding: 8px 16px;
   margin-right: 8px; /* Ajoutez une marge entre les boutons */
@@ -55,4 +55,14 @@ button:first-child {
 textarea[matInput] {
   width: 100%;
   resize: vertical; /* Permet de redimensionner verticalement seulement */
+}
+
+.cancel-icon {
+  color: red; /* Icône Cancel en rouge */
+  vertical-align: middle;
+}
+
+.update-icon {
+  color: white; /* Icône Update en blanc */
+  vertical-align: middle;
 }

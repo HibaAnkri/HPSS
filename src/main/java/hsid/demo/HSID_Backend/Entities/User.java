@@ -5,6 +5,8 @@ import hsid.demo.HSID_Backend.Enum.Role;
 import jakarta.persistence.*;
 import lombok.Data;
 
+
+
 @Entity
 @Table(name = "users")
 @Data
@@ -21,5 +23,5 @@ public class User {
 
     private Role role;
 
-    private Boolean active = false; // Default to inactive
+    private Boolean active;
 }

@@ -8,33 +8,58 @@
     <mat-card-content>
       <div class="mat-elevation-z8">
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-
-          <ng-container *ngIf="!hidePositionFields" matColumnDef="position">
+          <!-- Columns -->
+          <ng-container *ngIf="displayedColumns.includes('position')" matColumnDef="position">
             <th mat-header-cell *matHeaderCellDef> Position </th>
-            <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+            <td mat-cell *matCellDef="let element">
+              <span *ngIf="element.showPosition">{{ element.position }}</span>
+            </td>
           </ng-container>
 
-          <!-- Description P Column -->
-          <ng-container *ngIf="!hidePositionFields" matColumnDef="description_p">
+          <ng-container *ngIf="displayedColumns.includes('description_p')" matColumnDef="description_p">
             <th mat-header-cell *matHeaderCellDef> Description P </th>
-            <td mat-cell *matCellDef="let element"> {{element.description_p}} </td>
+            <td mat-cell *matCellDef="let element">
+              <span *ngIf="element.showDescriptionP">{{ element.description_p }}</span>
+            </td>
           </ng-container>
 
-
-          <ng-container matColumnDef="code">
+          <ng-container *ngIf="displayedColumns.includes('code')" matColumnDef="code">
             <th mat-header-cell *matHeaderCellDef> Code </th>
             <td mat-cell *matCellDef="let element"> {{element.code}} </td>
           </ng-container>
 
-
-          <ng-container matColumnDef="description_c">
+          <ng-container *ngIf="displayedColumns.includes('description_c')" matColumnDef="description_c">
             <th mat-header-cell *matHeaderCellDef> Description C </th>
             <td mat-cell *matCellDef="let element"> {{element.description_c}} </td>
           </ng-container>
 
+          <ng-container *ngIf="displayedColumns.includes('tag')" matColumnDef="tag">
+            <th mat-header-cell *matHeaderCellDef> Tag </th>
+            <td mat-cell *matCellDef="let element"> {{element.tag}} </td>
+          </ng-container>
 
-          <ng-container matColumnDef="action">
+          <ng-container *ngIf="displayedColumns.includes('nom')" matColumnDef="nom">
+            <th mat-header-cell *matHeaderCellDef> Nom </th>
+            <td mat-cell *matCellDef="let element"> {{element.nom}} </td>
+          </ng-container>
+
+          <ng-container *ngIf="displayedColumns.includes('longueur')" matColumnDef="longueur">
+            <th mat-header-cell *matHeaderCellDef> Longueur </th>
+            <td mat-cell *matCellDef="let element"> {{element.longueur}} </td>
+          </ng-container>
+
+          <ng-container *ngIf="displayedColumns.includes('format')" matColumnDef="format">
+            <th mat-header-cell *matHeaderCellDef> Format </th>
+            <td mat-cell *matCellDef="let element"> {{element.format}} </td>
+          </ng-container>
+
+          <ng-container *ngIf="displayedColumns.includes('description')" matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef> Description </th>
+            <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+          </ng-container>
+
+          <!-- Action Column -->
+          <ng-container *ngIf="displayedColumns.includes('action')" matColumnDef="action">
             <th mat-header-cell *matHeaderCellDef> Action </th>
             <td mat-cell *matCellDef="let element">
               <button mat-icon-button color="warn" (click)="deleteElementValue(element.id)">
@@ -46,12 +71,11 @@
             </td>
           </ng-container>
 
-
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
 
-        <mat-paginator [pageSizeOptions]="[10,15,20]" showFirstLastButtons></mat-paginator>
+        <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
       </div>
     </mat-card-content>
   </mat-card>

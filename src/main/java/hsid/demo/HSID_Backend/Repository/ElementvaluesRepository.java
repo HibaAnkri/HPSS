@@ -16,4 +16,6 @@ public interface ElementvaluesRepository extends JpaRepository<Elementvalues, Lo
     List<Elementvalues> findByNomprotocoleAndServiceAndServicecode(String nomprotocole, String service, String servicecode);
 
     boolean existsByElementnumberAndPositionAndCode(Integer elementnumber, String position, String code);
+    List<Elementvalues> findByElementnumberAndNomprotocoleAndCode(Integer elementnumber, String nomprotocole, String code);
+
 }

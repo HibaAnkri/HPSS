@@ -1,0 +1,13 @@
+.dialog-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button-full-width {
+  width: 100%;
+}
+
+mat-dialog-content {
+  text-align: center;
+  margin-bottom: 20px;
+}

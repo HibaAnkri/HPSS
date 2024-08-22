@@ -1,34 +1,84 @@
 <h1 mat-dialog-title>Add Element Value for Element Number {{ data.elementnumber }}</h1>
 <div mat-dialog-content>
   <form [formGroup]="addElementValueForm">
-    <mat-form-field *ngIf="!hidePositionFields" appearance="outline" class="full-width">
-      <mat-label>Position</mat-label>
-      <mat-select formControlName="position" required>
-        <mat-option *ngFor="let pos of data.positions" [value]="pos.position">
-          {{ pos.position }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
 
-    <mat-form-field *ngIf="!hidePositionFields" appearance="outline" class="full-width">
-      <mat-label>Description P</mat-label>
-      <input matInput formControlName="description_p" readonly>
-    </mat-form-field>
+    <!-- Conditional Fields for Element Numbers 48, 55, 61, 62, 127 -->
+    <ng-container *ngIf="isSpecialElementNumber">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Tag</mat-label>
+        <input matInput formControlName="tag" required>
+        <mat-error *ngIf="addElementValueForm.get('tag')?.hasError('required')">
+          Tag is required
+        </mat-error>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Code</mat-label>
-      <input matInput formControlName="code" required>
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nom</mat-label>
+        <input matInput formControlName="nom">
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Description C</mat-label>
-      <input matInput formControlName="description_c" required>
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Format</mat-label>
+        <input matInput formControlName="format">
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Protocol Name</mat-label>
-      <input matInput formControlName="nomprotocole" readonly>
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Longueur</mat-label>
+        <input matInput formControlName="longueur">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description</mat-label>
+        <input matInput formControlName="description" required>
+        <mat-error *ngIf="addElementValueForm.get('description')?.hasError('required')">
+          Description is required
+        </mat-error>
+      </mat-form-field>
+    </ng-container>
+
+    <!-- Default Fields for Other Element Numbers -->
+    <ng-container *ngIf="!isSpecialElementNumber">
+      <mat-form-field *ngIf="!hidePositionFields" appearance="outline" class="full-width">
+        <mat-label>Position</mat-label>
+        <mat-select formControlName="position" required>
+          <mat-option *ngFor="let pos of data.positions" [value]="pos.position">
+            {{ pos.position }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="addElementValueForm.get('position')?.hasError('required')">
+          Position is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field *ngIf="!hidePositionFields" appearance="outline" class="full-width">
+        <mat-label>Description P</mat-label>
+        <input matInput formControlName="description_p" readonly>
+        <mat-error *ngIf="addElementValueForm.get('description_p')?.hasError('required')">
+          Description P is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Code</mat-label>
+        <input matInput formControlName="code" required>
+        <mat-error *ngIf="addElementValueForm.get('code')?.hasError('required')">
+          Code is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description C</mat-label>
+        <input matInput formControlName="description_c" required>
+        <mat-error *ngIf="addElementValueForm.get('description_c')?.hasError('required')">
+          Description C is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Protocol Name</mat-label>
+        <input matInput formControlName="nomprotocole" readonly>
+      </mat-form-field>
+    </ng-container>
 
     <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
   </form>

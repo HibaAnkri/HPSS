@@ -20,11 +20,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
     @PostMapping()
     public ResponseEntity<?> createUser(@RequestBody User user) {
         try {
             return ResponseEntity.ok(userService.createUser(user));
-        } catch (Exception e) {
+        } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Some thing went wrong.");
         }
     }
@@ -33,9 +34,9 @@ public class UserController {
     public ResponseEntity<?> loginUser(@RequestBody User user) {
         try {
             return ResponseEntity.ok(userService.loginUser(user));
-        } catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
-        } catch (Exception e) {
+        } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Some thing went wrong.");
         }
     }
@@ -44,7 +45,7 @@ public class UserController {
     public ResponseEntity<?> getAllUsers() {
         try {
             return ResponseEntity.ok(userService.getAllUsers());
-        } catch (Exception e) {
+        } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Some thing went wrong.");
         }
     }
@@ -53,9 +54,9 @@ public class UserController {
     public ResponseEntity<?> updateUserStatus(@PathVariable Long userId) {
         try {
             return ResponseEntity.ok(userService.updateUserStatus(userId));
-        } catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
-        } catch (Exception e) {
+        } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Some thing went wrong.");
         }
     }
@@ -67,8 +68,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}/change-password")
-    public User changePassword(@PathVariable Long id, @RequestParam("newPassword") String newPassword) {
-        return userService.changePassword(id, newPassword);
+    public User changePassword(@PathVariable Long id, @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword) {
+        return userService.changePassword(id, oldPassword, newPassword);
     }
 
     @PutMapping("/set-inactive/{id}")
@@ -81,19 +82,17 @@ public class UserController {
         }
     }
 
-    // Nouvelle méthode pour changer le rôle de l'utilisateur
-    @PutMapping("/change-role/{userId}")
-    public ResponseEntity<?> changeUserRole(@PathVariable Long userId, @RequestBody Map<String, String> request) {
-        String newRole = request.get("role");
+    @PutMapping("/change-role/{id}")
+    public ResponseEntity<User> changeUserRole(@PathVariable Long id) {
         try {
-            User updatedUser = userService.changeUserRole(userId, Role.valueOf(newRole));
+            User updatedUser = userService.changeUserRoleToConfirmed(id);
             return ResponseEntity.ok(updatedUser);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid role provided");
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
-
 }

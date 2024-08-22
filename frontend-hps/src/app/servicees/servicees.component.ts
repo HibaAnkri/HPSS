@@ -15,6 +15,11 @@ interface Element {
   nomprotocole: string | null;
   service: string | null;
   servicecode: string | null;
+  showElementNumber?: boolean;
+  showPosition?: boolean;
+  showDescriptionP?: boolean;
+  selectedCodeDescription?: string;
+  codeDescriptionOptions?: string[];
 }
 
 @Component({
@@ -29,7 +34,7 @@ export class ServiceesComponent implements OnInit {
   public service: string = '';
   public servicecode: string = '';
 
-  public protocoles: string[] = ['HSID','MSID'];
+  public protocoles: string[] = ['HSID', 'MSID'];
   public services: string[] = [];
   public servicecodes: string[] = [];
 
@@ -60,13 +65,12 @@ export class ServiceesComponent implements OnInit {
 
   ngOnInit() {
     this.fetchData();
-    this.fetchFilters();
   }
 
   fetchData() {
     this.http.get<Element[]>('http://localhost:8080/api/element-values').subscribe({
       next: data => {
-        this.dataSource.data = data;
+        this.dataSource.data = this.groupElementValues(data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
@@ -76,8 +80,42 @@ export class ServiceesComponent implements OnInit {
     });
   }
 
-  fetchFilters() {
-    // Assuming these values are static and defined in the code as shown above
+  groupElementValues(data: Element[]): Element[] {
+    const groupedData: Element[] = [];
+    let lastElementNumber = '';
+    let lastPosition = '';
+    let lastDescriptionP = '';
+    let lastGroup: Element | null = null;
+
+    data.forEach(item => {
+      const elementnumberStr = item.elementnumber.toString();
+      const positionStr = item.position ?? '';
+      const descriptionPStr = item.description_p ?? '';
+      const codeDescriptionStr = `${item.code ?? ''} - ${item.description_c ?? ''}`;
+
+      if (groupedData.length > 0 && lastElementNumber === elementnumberStr && lastPosition === positionStr && lastDescriptionP === descriptionPStr) {
+        if (lastGroup && lastGroup.codeDescriptionOptions) {
+          lastGroup.codeDescriptionOptions.push(codeDescriptionStr);
+        }
+      } else {
+        const group: Element = {
+          ...item,
+          showElementNumber: elementnumberStr !== lastElementNumber,
+          showPosition: positionStr !== lastPosition,
+          showDescriptionP: descriptionPStr !== lastDescriptionP,
+          selectedCodeDescription: '',  // Initialize as empty string
+          codeDescriptionOptions: [codeDescriptionStr]
+        };
+
+        lastElementNumber = elementnumberStr;
+        lastPosition = positionStr;
+        lastDescriptionP = descriptionPStr;
+        lastGroup = group;
+        groupedData.push(group);
+      }
+    });
+
+    return groupedData;
   }
 
   filterData() {
@@ -99,7 +137,7 @@ export class ServiceesComponent implements OnInit {
 
     this.http.get<Element[]>(`http://localhost:8080/api/search`, { params }).subscribe({
       next: data => {
-        this.dataSource.data = data;
+        this.dataSource.data = this.groupElementValues(data);
         this.dataSource.paginator = this.paginator;
         this.updateDisplayedColumns(this.dataSource.data);
       },
@@ -143,5 +181,9 @@ export class ServiceesComponent implements OnInit {
     } else {
       this.servicecodes = [];
     }
+  }
+
+  onSelectionChange(element: Element, value: string) {
+    element.selectedCodeDescription = value;
   }
 }

@@ -11,6 +11,7 @@ export class EditElementValueDialogComponent implements OnInit {
   editForm: FormGroup;
   positions: { position: string; description_p: string }[] = [];
   hidePositionFields: boolean = false;
+  isSpecialElementNumber: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -18,27 +19,40 @@ export class EditElementValueDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.positions = data.positions;
-    this.hidePositionFields = data.elementnumber === 24 || data.elementnumber === 25;
-    this.editForm = this.fb.group({
-      id: [data.id],
-      elementnumber: [data.elementnumber, Validators.required],
-      position: [data.position, this.hidePositionFields ? [] : Validators.required],
-      description_p: [{ value: data.description_p, disabled: this.hidePositionFields }, this.hidePositionFields ? [] : Validators.required],
-      code: [data.code, Validators.required],
-      description_c: [data.description_c, Validators.required],
-      in_message: [data.in_message],
-      nomprotocole: [data.nomprotocole],
-      service: [data.service],
-      servicecode: [data.servicecode]
-    });
+    this.isSpecialElementNumber = [48, 55, 61, 62, 127].includes(data.elementnumber);
+    this.hidePositionFields = data.elementnumber === 24 || data.elementnumber === 25 || data.elementnumber === 39;
+
+    if (this.isSpecialElementNumber) {
+      this.editForm = this.fb.group({
+        tag: [data.tag, Validators.required],
+        nom: [data.nom],
+        format: [data.format],
+        longueur: [data.longueur],
+        description: [data.description, Validators.required]
+      });
+    } else {
+      this.editForm = this.fb.group({
+        id: [data.id],
+        elementnumber: [data.elementnumber, Validators.required],
+        position: [data.position, this.hidePositionFields ? [] : Validators.required],
+        description_p: [{ value: data.description_p, disabled: this.hidePositionFields }, this.hidePositionFields ? [] : Validators.required],
+        code: [data.code, Validators.required],
+        description_c: [data.description_c, Validators.required],
+        in_message: [data.in_message],
+        nomprotocole: [data.nomprotocole],
+        service: [data.service],
+        servicecode: [data.servicecode]
+      });
+    }
   }
 
   ngOnInit(): void {
-    if (!this.hidePositionFields) {
+    if (!this.hidePositionFields && !this.isSpecialElementNumber) {
       this.editForm.get('position')?.valueChanges.subscribe(value => {
         const selectedPosition = this.positions.find(p => p.position === value);
         if (selectedPosition) {
           this.editForm.get('description_p')?.setValue(selectedPosition.description_p);
+
         }
       });
     }
@@ -50,13 +64,7 @@ export class EditElementValueDialogComponent implements OnInit {
 
   onSaveClick(): void {
     if (this.editForm.valid) {
-
-      const result = {
-        ...this.editForm.getRawValue(),
-        position: this.data.position,
-        description_p: this.data.description_p
-      };
-      this.dialogRef.close(result);
+      this.dialogRef.close(this.editForm.getRawValue());
     }
   }
 }

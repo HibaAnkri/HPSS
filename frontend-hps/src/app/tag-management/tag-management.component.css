@@ -1,0 +1,11 @@
+.container {
+  padding: 20px;
+}
+
+.mat-card {
+  margin: 20px 0;
+}
+
+.mat-elevation-z8 {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}

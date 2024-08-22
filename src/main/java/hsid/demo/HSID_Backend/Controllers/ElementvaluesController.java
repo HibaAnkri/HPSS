@@ -1,6 +1,7 @@
 package hsid.demo.HSID_Backend.Controllers;
 
 import hsid.demo.HSID_Backend.Dtos.ElementvaluesDto;
+import hsid.demo.HSID_Backend.Dtos.TagsDto;
 import hsid.demo.HSID_Backend.Entities.Elementvalues;
 import hsid.demo.HSID_Backend.Service.ElementvaluesService;
 import org.apache.tomcat.util.bcel.classfile.ElementValue;
@@ -181,4 +182,18 @@ public class ElementvaluesController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping("/element-values/tags")
+    public List<TagsDto> getElementValuesAsTags(
+            @RequestParam Integer elementnumber,
+            @RequestParam String code) {
+        return elementvaluesService.getElementValuesAsTags(elementnumber,code);
+    }
+    @CrossOrigin(origins = "http://localhost:4200")
+    @PostMapping("/tags")
+    public ResponseEntity<TagsDto> createTag(@RequestBody TagsDto tagsDto) {
+        TagsDto createdTag = elementvaluesService.createTag(tagsDto);
+        return ResponseEntity.ok(createdTag);
+    }
+
 }

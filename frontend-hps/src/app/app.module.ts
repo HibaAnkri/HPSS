@@ -54,6 +54,9 @@ import { FilterpageComponent } from './filterpage/filterpage.component';
 import { AccesspanelComponent } from './accesspanel/accesspanel.component';
 import { AddElementValueDialogComponent } from './add-element-value-dialog/add-element-value-dialog.component';
 import { EditElementValueDialogComponent } from './edit-element-value-dialog/edit-element-value-dialog.component';
+import { UpdateRequirementDialogComponent } from './update-requirement-dialog/update-requirement-dialog.component';
+
+import { TagManagementComponent } from './tag-management/tag-management.component';
 
 @NgModule({
   declarations: [
@@ -82,7 +85,9 @@ import { EditElementValueDialogComponent } from './edit-element-value-dialog/edi
     FilterpageComponent,
     AccesspanelComponent,
     AddElementValueDialogComponent,
-    EditElementValueDialogComponent
+    EditElementValueDialogComponent,
+   UpdateRequirementDialogComponent,
+   TagManagementComponent
   ],
   imports: [
     BrowserModule,

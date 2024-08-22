@@ -1,8 +1,9 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource} from "@angular/material/table";
-import {MatPaginator} from "@angular/material/paginator";
-import {MatSort} from "@angular/material/sort";
-import {HttpClient, HttpParams} from "@angular/common/http";
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatTableDataSource } from "@angular/material/table";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+import { HttpClient, HttpParams } from "@angular/common/http";
+
 interface Element {
   id: number;
   elementnumber: number;
@@ -12,47 +13,44 @@ interface Element {
   description_c: string | null;
   in_message: string | null;
   nomprotocole: string | null;
+  showPosition?: boolean;
+  showDescriptionP?: boolean;
 }
+
 @Component({
   selector: 'app-services',
   templateUrl: './services.component.html',
-  styleUrl: './services.component.css'
+  styleUrls: ['./services.component.css']
 })
 export class ServicesComponent implements OnInit {
   public dataSource = new MatTableDataSource<Element>();
-  public displayedColumns: string[] = ['elementnumber', 'position', 'description_p', 'code', 'description_c', 'in_message'];
+  public displayedColumns: string[] = ['position', 'description_p', 'code', 'description_c'];
   public elementnumber: number | null = null;
   public code: string = '';
   public position: string = '';
 
-  public elementNumbers: number[] = [3, 22, 24, 25, 39, 53, 54, 56,48, 60];
-  public codes: string[] = [ '1200', '1210', '1220','1420','1421','1422','1423','1430','1432','1804','1814'];
+  public elementNumbers: number[] = [3, 22, 24, 25, 39, 53, 54, 56, 48, 60];
+  public codes: string[] = ['1200', '1210', '1220', '1420', '1421', '1422', '1423', '1430', '1432', '1804', '1814'];
   public positions: string[] = [];
 
   private excludedElementsForCode: { [key: string]: number[] } = {
-
-    'M_1200': [3,56, 39, 54, 56],
+    'M_1200': [3, 56, 39, 54, 56],
     'M_1210': [56, 53, 56],
-    'M_1220': [ 25,53,54],
-    'M_1420': [ 25,53,54],
-    'M_1421': [ 25,53,54],
-    'M_1422': [ 25,53,54],
-    'M_1423': [48,54],
-    'M_1430': [22,24,25,48,54,56],
-    'M_1432':[22,24,25,48,54,56],
-    'M_1804': [3,22,39,53,56],
-    'M_1814': [3,22,48,53,54,56],
-
-
-
-
+    'M_1220': [25, 53, 54],
+    'M_1420': [25, 53, 54],
+    'M_1421': [25, 53, 54],
+    'M_1422': [25, 53, 54],
+    'M_1423': [48, 54],
+    'M_1430': [22, 24, 25, 48, 54, 56],
+    'M_1432': [22, 24, 25, 48, 54, 56],
+    'M_1804': [3, 22, 39, 53, 56],
+    'M_1814': [3, 22, 48, 53, 54, 56],
   };
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
     this.fetchData();
@@ -61,9 +59,10 @@ export class ServicesComponent implements OnInit {
   fetchData() {
     this.http.get<Element[]>('http://localhost:8080/api/element-values').subscribe({
       next: data => {
-        this.dataSource.data = this.applyExclusions(data);
-        this.dataSource.paginator = this.paginator;  // Bind paginator to data source
-        this.dataSource.sort = this.sort;  // Bind sort to data source
+        const groupedData = this.groupElementValues(this.applyExclusions(data));
+        this.dataSource.data = groupedData;
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
       },
       error: err => {
         console.error('Error fetching element values:', err);
@@ -89,10 +88,11 @@ export class ServicesComponent implements OnInit {
       return;
     }
 
-    this.http.get<Element[]>(`http://localhost:8080/api/element-values`, {params}).subscribe({
+    this.http.get<Element[]>(`http://localhost:8080/api/element-values`, { params }).subscribe({
       next: data => {
-        this.dataSource.data = this.applyExclusions(data);
-        this.dataSource.paginator = this.paginator;  // Bind paginator to data source
+        const groupedData = this.groupElementValues(this.applyExclusions(data));
+        this.dataSource.data = groupedData;
+        this.dataSource.paginator = this.paginator;
         this.updateDisplayedColumns(this.dataSource.data);
       },
       error: err => {
@@ -109,18 +109,40 @@ export class ServicesComponent implements OnInit {
     return data;
   }
 
-  updateDisplayedColumns(data: Element[]): void {
-    const columns = ['elementnumber', 'position', 'description_p', 'code', 'description_c', 'in_message'];
-    this.displayedColumns = columns.filter(column => data.some(element => element[column as keyof Element] !== null && element[column as keyof Element] !== ''));
+  groupElementValues(data: Element[]): Element[] {
+    const groupedData: Element[] = [];
+    let lastPosition = '';
+    let lastDescriptionP = '';
+
+    data.forEach(item => {
+      const group = {
+        ...item,
+        showPosition: item.position !== lastPosition,
+        showDescriptionP: item.description_p !== lastDescriptionP
+      };
+
+      if (group.showPosition) {
+        lastPosition = item.position ?? '';
+      }
+
+      if (group.showDescriptionP) {
+        lastDescriptionP = item.description_p ?? '';
+      }
+
+      groupedData.push(group);
+    });
+
+    return groupedData;
   }
 
-  removePrefix(code: string | null): string {
-    return code ? code.replace(/^M_/, '') : '';
+  updateDisplayedColumns(data: Element[]): void {
+    const columns = ['position', 'description_p', 'code', 'description_c'];
+    this.displayedColumns = columns.filter(column => data.some(element => element[column as keyof Element] !== null && element[column as keyof Element] !== ''));
   }
 
   onElementNumberChange() {
     if (this.elementnumber !== null) {
-      this.http.get<string[]>(`http://localhost:8080/api/positions`, {params: new HttpParams().set('elementnumber', this.elementnumber.toString())})
+      this.http.get<string[]>(`http://localhost:8080/api/positions`, { params: new HttpParams().set('elementnumber', this.elementnumber.toString()) })
         .subscribe({
           next: positions => {
             this.positions = positions;

@@ -15,12 +15,12 @@ import { EditElementValueDialogComponent } from '../edit-element-value-dialog/ed
 })
 export class ElementValuesComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<any>();
-  displayedColumns: string[] = ['position', 'description_p', 'code', 'description_c', 'action'];
+  displayedColumns: string[] = [];
   elementnumber: number | null = null;
   nomprotocole: string | null = null;
+  columns: string[] = [];
   positions: { position: string; description_p: string }[] = [];
   hidePositionFields: boolean = false;
-
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -32,8 +32,18 @@ export class ElementValuesComponent implements OnInit, AfterViewInit {
   ) {
     this.elementnumber = data.elementnumber;
     this.nomprotocole = data.nomprotocole;
-    this.hidePositionFields = this.elementnumber === 24 || this.elementnumber === 25;
+    this.columns = data.columns;
 
+    this.displayedColumns = this.columns;
+    this.hidePositionFields = this.elementnumber === 24 || this.elementnumber === 25 || this.elementnumber === 39;
+
+    if (this.elementnumber === 55 || this.elementnumber === 61 || this.elementnumber === 62) {
+      this.displayedColumns = this.displayedColumns.filter(column => column !== 'nom');
+    }
+
+    if (this.elementnumber === 61 || this.elementnumber === 62) {
+      this.displayedColumns = this.displayedColumns.filter(column => column !== 'format');
+    }
     if (this.hidePositionFields) {
       this.displayedColumns = this.displayedColumns.filter(column => column !== 'position' && column !== 'description_p');
     }
@@ -44,19 +54,28 @@ export class ElementValuesComponent implements OnInit, AfterViewInit {
     this.fetchPositions();
   }
 
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
   fetchElementValues(): void {
     if (this.elementnumber !== null && this.nomprotocole !== null) {
-      this.http.get<any[]>(`http://localhost:8080/api/element-values?elementnumber=${this.elementnumber}&nomprotocole=${this.nomprotocole}`)
-        .subscribe({
-          next: data => {
-            const uniqueData = this.removeDuplicates(data);
-            this.sortElementValues(uniqueData);
-            this.dataSource.data = uniqueData;
-          },
-          error: err => {
-            console.error('Error fetching element values:', err);
-          }
-        });
+      let apiUrl = `http://localhost:8080/api/element-values?elementnumber=${this.elementnumber}&nomprotocole=${this.nomprotocole}`;
+
+      if ([55, 48, 61, 62, 127].includes(this.elementnumber)) {
+        apiUrl = `http://localhost:8080/api/element-values/tags?elementnumber=${this.elementnumber}&code=${this.nomprotocole === 'HSID' ? 'H_1200' : 'M_1200'}`;
+      }
+
+      this.http.get<any[]>(apiUrl).subscribe({
+        next: data => {
+          this.dataSource.data = this.groupElementValues(data);
+          this.sortElementValues(this.dataSource.data);
+        },
+        error: err => {
+          console.error('Error fetching element values:', err);
+        }
+      });
     }
   }
 
@@ -80,23 +99,6 @@ export class ElementValuesComponent implements OnInit, AfterViewInit {
     }
   }
 
-  removeDuplicates(data: any[]): any[] {
-    return data.filter((value, index, self) =>
-        index === self.findIndex((t) => (
-          t.position === value.position &&
-          t.description_p === value.description_p &&
-          t.code === value.code &&
-          t.description_c === value.description_c &&
-          t.nomprotocole === value.nomprotocole
-        ))
-    );
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
   openAddElementValueDialog(): void {
     const dialogRef = this.dialog.open(AddElementValueDialogComponent, {
       width: '400px',
@@ -115,16 +117,36 @@ export class ElementValuesComponent implements OnInit, AfterViewInit {
   }
 
   addElementValue(elementValue: any): void {
-    this.http.post(`http://localhost:8080/api/element-values?elementnumber=${this.elementnumber}&position=${elementValue.position}&description_p=${elementValue.description_p}`, elementValue)
-      .subscribe({
-        next: response => {
-          console.log('Element Value added:', response);
-          this.fetchElementValues();
-        },
-        error: err => {
-          console.error('Error adding element value:', err);
-        }
-      });
+    const elementnumber = this.elementnumber ?? 0;
+    elementValue.elementNumber = elementnumber;
+    elementValue.nomprotocole = this.nomprotocole;
+
+    if ([48, 55, 61, 62, 127].includes(elementnumber)) {
+      this.http.post(`http://localhost:8080/api/tags`, elementValue)
+        .subscribe({
+          next: response => {
+            console.log('Element Value added:', response);
+            this.fetchElementValues();
+          },
+          error: err => {
+            console.error('Error adding element value:', err);
+          }
+        });
+    } else {
+      const position = elementValue.position ? elementValue.position : '';
+      const description_p = elementValue.description_p ? elementValue.description_p : '';
+
+      this.http.post(`http://localhost:8080/api/element-values?elementnumber=${elementnumber}&position=${position}&description_p=${description_p}`, elementValue)
+        .subscribe({
+          next: response => {
+            console.log('Element Value added:', response);
+            this.fetchElementValues();
+          },
+          error: err => {
+            console.error('Error adding element value:', err);
+          }
+        });
+    }
   }
 
   deleteElementValue(id: number): void {
@@ -149,26 +171,10 @@ export class ElementValuesComponent implements OnInit, AfterViewInit {
     });
   }
 
-  confirmDeleteElementValue(id: number): void {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '300px',
-      data: {}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === true) {
-        this.deleteElementValue(id);
-      }
-    });
-  }
-
   openEditElementValueDialog(element: any): void {
     const dialogRef = this.dialog.open(EditElementValueDialogComponent, {
       width: '400px',
-      data: {
-        ...element,
-        positions: this.positions
-      }
+      data: { ...element }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -191,23 +197,57 @@ export class ElementValuesComponent implements OnInit, AfterViewInit {
       });
   }
 
+  private groupElementValues(data: any[]): any[] {
+    const groupedData: any[] = [];
+    let lastPosition = '';
+    let lastDescriptionP = '';
+
+    data.forEach(item => {
+      const group = {
+        ...item,
+        showPosition: item.position !== lastPosition,
+        showDescriptionP: item.description_p !== lastDescriptionP
+      };
+
+      if (group.showPosition) {
+        lastPosition = item.position;
+      }
+
+      if (group.showDescriptionP) {
+        lastDescriptionP = item.description_p;
+      }
+
+      groupedData.push(group);
+    });
+
+    return groupedData;
+  }
+
   private sortElementValues(elementValues: any[]): void {
     elementValues.sort((a, b) => {
       if (a.elementnumber === 24 || a.elementnumber === 25) {
         if (a.elementnumber === b.elementnumber) {
-          return a.code - b.code; // Sort by code if both elementnumbers are 24 or 25
+          return a.code.localeCompare(b.code);
         }
-        return a.elementnumber - b.elementnumber; // Sort by elementnumber if they are different
-      } else {
-        const posA = a.position.split('--').map(Number);
-        const posB = b.position.split('--').map(Number);
-        for (let i = 0; i < Math.max(posA.length, posB.length); i++) {
-          if (posA[i] !== posB[i]) {
-            return (posA[i] || 0) - (posB[i] || 0);
+        return a.elementnumber - b.elementnumber;
+      } else if (![39, 24, 25, 48, 55, 61, 62, 127].includes(a.elementnumber)) {
+        if (a.position && b.position) {
+          const posA = a.position.split('--').map(Number);
+          const posB = b.position.split('--').map(Number);
+
+          for (let i = 0; i < Math.max(posA.length, posB.length); i++) {
+            if (posA[i] !== posB[i]) {
+              return (posA[i] || 0) - (posB[i] || 0);
+            }
           }
+        } else if (!a.position && b.position) {
+          return 1;
+        } else if (a.position && !b.position) {
+          return -1;
         }
-        return 0;
       }
+
+      return 0;
     });
   }
 }
